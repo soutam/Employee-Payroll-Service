@@ -4,6 +4,8 @@ import com.example.microservice.Employeepayrollservice.Model.EmployeeDetails;
 import com.example.microservice.Employeepayrollservice.Model.EmployeePayroll;
 import com.example.microservice.Employeepayrollservice.Model.RoleDetails;
 import com.example.microservice.Employeepayrollservice.Repository.EmployeePayRollRepo;
+import com.example.microservice.Employeepayrollservice.ServiceClients.EmployeeServiceClient;
+import com.example.microservice.Employeepayrollservice.ServiceClients.RoleServiceClients;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,26 +22,29 @@ public class EmployeePayrollController {
     @Autowired
     EmployeePayRollRepo employeePayRollRepo;
 
+    @Autowired
+    EmployeeServiceClient employeeServiceClient;
+
+    @Autowired
+    RoleServiceClients roleServiceClients;
 
     @PostMapping("/employee/{empId}/role/{roleName}")
     public void insertEmployeePayRoleDetails(@PathVariable Long empId, @PathVariable String roleName){
         //TODO Insertion logic
         //EmployeePayroll employeePayroll = new EmployeePayroll(001l,002l,001l,"AAA","BB","Human Resource");
-        ResponseEntity<EmployeeDetails> employeeResponse =
-                new RestTemplate().getForEntity("http://localhost:8080/employee/{empId}", EmployeeDetails.class, empId);
-        ResponseEntity<RoleDetails> roleResponse =
-                new RestTemplate().getForEntity("http://localhost:8101/role/{roleName}", RoleDetails.class, roleName);
         EmployeePayroll employeePayroll = new EmployeePayroll();
+        EmployeeDetails employeeDetails = employeeServiceClient.getEmployeeDetails(empId);
+        RoleDetails roleDetails = roleServiceClients.getRoleDetails(roleName);
 
-        if(employeeResponse.getBody() != null){
-            employeePayroll.setEmpId(employeeResponse.getBody().getEmpId());
-            employeePayroll.setFirstName(employeeResponse.getBody().getFirstName());
-            employeePayroll.setLastName(employeeResponse.getBody().getLastName());
+       if(employeeDetails != null){
+            employeePayroll.setEmpId(employeeDetails.getEmpId());
+            employeePayroll.setFirstName(employeeDetails.getFirstName());
+            employeePayroll.setLastName(employeeDetails.getLastName());
         }
-        if (roleResponse.getBody()!=null)
+        if (roleDetails!=null)
         {
-            employeePayroll.setRoleId(roleResponse.getBody().getRoleId());
-            employeePayroll.setRoleDesc(roleResponse.getBody().getRoleDescription());
+            employeePayroll.setRoleId(roleDetails.getRoleId());
+            employeePayroll.setRoleDesc(roleDetails.getRoleDescription());
         }
         employeePayRollRepo.save(employeePayroll);
     }
