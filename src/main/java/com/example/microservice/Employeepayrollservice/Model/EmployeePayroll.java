@@ -28,6 +28,7 @@ public class EmployeePayroll {
     @Column(name = "role_desc")
     private String roleDesc;
 
+    private String port;
     public EmployeePayroll() {
     }
 
@@ -63,4 +64,12 @@ public class EmployeePayroll {
     public String getRoleDesc() { return roleDesc; }
 
     public void setRoleDesc(String roleDesc) { this.roleDesc = roleDesc; }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
+    }
 }
