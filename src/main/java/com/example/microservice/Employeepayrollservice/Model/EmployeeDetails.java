@@ -5,6 +5,7 @@ public class EmployeeDetails {
     private String firstName;
     private String lastName;
     private Long empId;
+    private String port;
 
     public EmployeeDetails (String firstName, String lastName, Long empId ){
         super();
@@ -37,5 +38,13 @@ public class EmployeeDetails {
 
     public void setEmpId(Long empId) {
         this.empId = empId;
+    }
+
+    public String getPort() {
+        return port;
+    }
+
+    public void setPort(String port) {
+        this.port = port;
     }
 }

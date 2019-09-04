@@ -29,7 +29,7 @@ public class EmployeePayrollController {
     RoleServiceClients roleServiceClients;
 
     @PostMapping("/employee/{empId}/role/{roleName}")
-    public void insertEmployeePayRoleDetails(@PathVariable Long empId, @PathVariable String roleName){
+    public EmployeePayroll insertEmployeePayRoleDetails(@PathVariable Long empId, @PathVariable String roleName){
         //TODO Insertion logic
         //EmployeePayroll employeePayroll = new EmployeePayroll(001l,002l,001l,"AAA","BB","Human Resource");
         EmployeePayroll employeePayroll = new EmployeePayroll();
@@ -40,6 +40,7 @@ public class EmployeePayrollController {
             employeePayroll.setEmpId(employeeDetails.getEmpId());
             employeePayroll.setFirstName(employeeDetails.getFirstName());
             employeePayroll.setLastName(employeeDetails.getLastName());
+           employeePayroll.setPort(employeeDetails.getPort());
         }
         if (roleDetails!=null)
         {
@@ -47,6 +48,7 @@ public class EmployeePayrollController {
             employeePayroll.setRoleDesc(roleDetails.getRoleDescription());
         }
         employeePayRollRepo.save(employeePayroll);
+        return employeePayroll;
     }
 
     @GetMapping("/employee/{empId}")
